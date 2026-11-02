@@ -18,7 +18,8 @@ export const categories = [
   { id: 'pulseras', name: 'Pulseras' },
   { id: 'collares', name: 'Collares' },
 ];
-export const imageUrl = (file) => `/assets/${file}`;
+// Image URLs resolve from index.html; hash navigation never changes its directory.
+export const imageUrl = (file) => `./assets/${file}`;
 export const money = (amount) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
 export const getProduct = (id) => products.find((product) => product.id === id);
 export const categoryName = (id) => categories.find((category) => category.id === id)?.name || 'Todas las piezas';

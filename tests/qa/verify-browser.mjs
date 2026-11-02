@@ -1,8 +1,8 @@
 import { chromium, devices } from 'playwright';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { products } from '../src/data/products.js';
-const base = process.env.TEST_URL || 'http://127.0.0.1:5173';
+import { products } from '../../js/data/products.js';
+const base = (process.env.TEST_URL || 'http://127.0.0.1:5502').replace(/\/$/, '');
 await mkdir('artifacts', { recursive: true });
 const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'msedge', headless: true });
 const errors = [], failedRequests = [], checks = [];
@@ -57,7 +57,7 @@ try {
   await page.waitForFunction(() => [...document.images].every((image) => image.complete && image.naturalWidth > 0), null, { timeout: 8000 });
   check('All homepage photographs load on cold entry without changing loading attributes');
   for (const selector of ['header .brand-logo img', 'footer .brand-logo img', '#menu-dialog .brand-logo img']) {
-    assert.equal(await page.locator(selector).getAttribute('src'), '/assets/logo.jpeg');
+    assert.equal(await page.locator(selector).getAttribute('src'), './assets/logo.jpeg');
     assert.ok(await page.locator(selector).evaluate((image) => image.complete && image.naturalWidth > 0));
   }
   check('Original company logo is loaded in header, footer and mobile menu');

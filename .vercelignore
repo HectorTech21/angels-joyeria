@@ -7,6 +7,8 @@ artifacts
 .git
 docs
 tests
+test-results
+README.md
 .env
 .env.*
 *.log

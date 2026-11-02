@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createCartStore, sanitizeCart, CART_KEY } from '../src/lib/cart-store.js';
-import { products, filterProducts } from '../src/data/products.js';
+import { createCartStore, sanitizeCart, CART_KEY } from '../js/lib/cart-store.js';
+import { products, filterProducts } from '../js/data/products.js';
 
 function memoryStorage(initial = null) {
   const values = new Map(initial ? [[CART_KEY, initial]] : []);

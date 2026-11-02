@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readRoute } from '../src/lib/router.js';
+import { readRoute } from '../js/lib/router.js';
 
 test('cold document anchors still resolve a mountable homepage', () => {
   for (const hash of ['', '#', '#contenido', '#seleccion', '#unknown', '#%malformed']) {

@@ -3,12 +3,12 @@ import { chromium, devices } from 'playwright';
 import { mkdir, readdir, stat, readFile, writeFile } from 'node:fs/promises';
 import { resolve, relative, extname } from 'node:path';
 import { createHash } from 'node:crypto';
-import { products, categories } from '../src/data/products.js';
+import { products, categories } from '../../js/data/products.js';
 import { checkAssets } from './check-assets.mjs';
 
-const base = process.env.TEST_URL || 'http://127.0.0.1:5173';
-const mode = new URL(base).port === '4173' ? 'preview' : 'dev';
-const output = resolve('artifacts/image-repair');
+const base = (process.env.TEST_URL || 'http://127.0.0.1:5502').replace(/\/$/, '');
+const mode = 'static';
+const output = resolve('artifacts/static-migration/images');
 await mkdir(output, { recursive: true });
 const urls = await checkAssets();
 const report = { date: new Date().toISOString(), base, mode, originals: [], views: [], network: [], errors: [], inventory: [] };
@@ -16,7 +16,7 @@ const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 
 
 async function inventory(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (entry.name === '.git') continue;
+    if (['.git', '.backups', '.cache', 'node_modules', 'artifacts'].includes(entry.name)) continue;
     const absolute = resolve(directory, entry.name);
     if (entry.isDirectory()) await inventory(absolute);
     else if (/\.(jpe?g|png|webp|avif|gif|svg|ico|bmp|tiff?|heic)$/i.test(entry.name)) {
@@ -102,7 +102,7 @@ try {
     // Explicit HTTP MIME + binary signature + browser decode for all originals,
     // including gallery-only images not requested by the homepage.
     for (const url of urls) {
-      const response = await context.request.get(`${base}${url}`);
+      const response = await context.request.get(new URL(url, `${base}/`).href);
       const bytes = await response.body();
       const type = response.headers()['content-type'];
       assert.equal(response.status(), 200, url);
@@ -115,10 +115,9 @@ try {
         const image = new Image(); image.src = src; await image.decode();
         return { width: image.naturalWidth, height: image.naturalHeight };
       }, url);
-      const source = await readFile(resolve(`public${url}`));
+      const source = await readFile(resolve(url));
       assert.ok(bytes.equals(source), `HTTP no devuelve el original: ${url}`);
-      if (mode === 'preview') assert.ok(source.equals(await readFile(resolve(`dist${url}`))), `Dist difiere: ${url}`);
-      report.originals.push({ viewport, url, absolute: resolve(`public${url}`), relative: `public${url}`,
+      report.originals.push({ viewport, url, absolute: resolve(url), relative: url,
         bytes: bytes.length, type, signature: png ? 'PNG' : 'JPEG', status: response.status(), ...dimensions,
         sha256: createHash('sha256').update(source).digest('hex') });
     }

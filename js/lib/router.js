@@ -1,4 +1,4 @@
-// Hash navigation for the local prototype, independent of Vite.
+// Browser-native hash navigation: direct links and reloads need no server rewrites.
 // A document anchor must never prevent the first page from mounting.
 export function readRoute(hash = '') {
   const fragment = hash.replace(/^#/, '');
