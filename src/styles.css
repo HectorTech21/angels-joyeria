@@ -1,0 +1,8 @@
+/* Shared theme assets. Keep component rules independent of the prototype router. */
+@import './styles/base.css';
+@import './styles/shell.css';
+@import './styles/home.css';
+@import './styles/commerce.css';
+@import './styles/dialogs.css';
+@import './styles/responsive.css';
+@import './styles/motion.css';

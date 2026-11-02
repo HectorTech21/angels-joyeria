@@ -1,0 +1,12 @@
+node_modules
+dist
+artifacts
+.cache
+.backups
+.vscode
+.git
+docs
+tests
+.env
+.env.*
+*.log

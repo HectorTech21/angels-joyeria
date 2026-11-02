@@ -1,0 +1,25 @@
+@media(hover:none){
+  .product-view{
+    display:none
+  }
+  .product-card:hover .product-photo img{
+    transform:scale(var(--photo-scale,1))
+  }
+  .category-link:hover{
+    background:transparent
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html{
+    scroll-behavior:auto
+  }
+  *,*:before,*:after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important
+  }
+  .hero-photo>img{
+    transform:none
+  }
+}

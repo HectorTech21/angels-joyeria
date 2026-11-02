@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vite/
+artifacts/
+test-results/
+*.log
+.cache/
+.backups/
+.vercel/
+.vscode/
+.env
+.env.*
